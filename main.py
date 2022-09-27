@@ -21,6 +21,7 @@ ENABLE = "enable"
 
 # list of cases
 DISABLED = "disabled"
+ENABLED = "enabled"
 
 
 print(f"{basename(__file__)} is now running\n\nbe silent for a moment to set the mic sensitivity\n")
@@ -41,7 +42,16 @@ def voice_command():
         
         if DISABLED in command:
             print(f"corrected: {command}")
+            
             command = command.replace(DISABLED, DISABLE)
+            
+            print(f"to: {command}")
+        #
+        elif ENABLED in command:
+            print(f"corrected: {command}")
+            
+            command = command.replace(ENABLED, ENABLE)
+            
             print(f"to: {command}")
         #
         if START_SEQUENCE and DISABLE in command:
@@ -49,16 +59,16 @@ def voice_command():
             
             print(f"disabling the following parameter: {parameter}\n")
             
-            driver.send_message(f"/avatar/parameters/{parameter}", True)
+            driver.send_message(f"/avatar/parameters/{parameter}", False)
             
-            print("voice-command sent to vrchat!\n")
+            print("voice-command sent to vrchat!\n\npress \"F\" to speak!\n")
         #
         elif START_SEQUENCE and ENABLE in command:
             parameter = command.replace(f"{START_SEQUENCE} ", "").replace(f"{ENABLE} ", "").capitalize()
             
             print(f"enabling the following parameter: {parameter}\n")
             
-            driver.send_message(f"/avatar/parameters/{parameter}", False)
+            driver.send_message(f"/avatar/parameters/{parameter}", True)
             
             print("voice-command sent to vrchat!\n\npress \"F\" to speak!\n")
         #

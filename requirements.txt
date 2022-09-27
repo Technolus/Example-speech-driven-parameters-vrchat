@@ -1,0 +1,5 @@
+# list of required modules
+speechrecognition==3.8.1
+python-osc==1.8.0
+keyboard==0.13.5
+pyaudio==0.2.12
