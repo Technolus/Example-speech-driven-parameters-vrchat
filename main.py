@@ -6,6 +6,7 @@ from speech_recognition import Microphone, Recognizer, UnknownValueError
 from pythonosc.udp_client import SimpleUDPClient
 from os.path import basename
 from keyboard import wait
+from re import sub
 
 
 driver = SimpleUDPClient("127.0.0.1", 9000)
@@ -27,7 +28,7 @@ def voice_command():
     print("listening now...\n")
     with mic as voice: speech = engine.listen(voice)
     try:
-        command = str(engine.recognize_google(speech)).casefold()
+        command = sub("[^A-Za-z0-9]+", "", str(engine.recognize_google(speech)).casefold())
         print(f"speech recognized as: {command}.\n")
         if START_SEQUENCE and DISABLE in command:
             parameter = command.replace(START_SEQUENCE, "").replace(DISABLE, "").capitalize()
