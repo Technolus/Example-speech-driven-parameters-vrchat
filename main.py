@@ -14,34 +14,56 @@ engine = Recognizer()
 mic = Microphone()
 
 
-START_SEQUENCE = "avatar "
-DISABLE = "disable "
-ENABLE = "enable "
+START_SEQUENCE = "avatar"
+DISABLE = "disable"
+ENABLE = "enable"
+
+
+# list of cases
+DISABLED = "disabled"
 
 
 print(f"{basename(__file__)} is now running\n\nbe silent for a moment to set the mic sensitivity\n")
+
 with mic as back_ground_noise: engine.adjust_for_ambient_noise(back_ground_noise, duration=2)
+
 print(f"mic sensitivity set to: {engine.energy_threshold}\n\npress \"F\" to speak!\n")
 
 
 def voice_command():
     print("listening now...\n")
+    
     with mic as voice: speech = engine.listen(voice)
     try:
         command = sub(r"[^\w\s]", "", str(engine.recognize_google(speech)).casefold())
+        
         print(f"speech recognized as: {command}.\n")
+        
+        if DISABLED in command:
+            print(f"corrected: {command}")
+            command = command.replace(DISABLED, DISABLE)
+            print(f"to: {command}")
+        #
         if START_SEQUENCE and DISABLE in command:
-            parameter = command.replace(START_SEQUENCE, "").replace(DISABLE, "").capitalize()
+            parameter = command.replace(f"{START_SEQUENCE} ", "").replace(f"{DISABLE} ", "").capitalize()
+            
             print(f"disabling the following parameter: {parameter}\n")
+            
             driver.send_message(f"/avatar/parameters/{parameter}", True)
+            
             print("voice-command sent to vrchat!\n")
+        #
         elif START_SEQUENCE and ENABLE in command:
-            parameter = command.replace(START_SEQUENCE, "").replace(ENABLE, "").capitalize()
+            parameter = command.replace(f"{START_SEQUENCE} ", "").replace(f"{ENABLE} ", "").capitalize()
+            
             print(f"enabling the following parameter: {parameter}\n")
+            
             driver.send_message(f"/avatar/parameters/{parameter}", False)
-            print("voice-command sent to vrchat!\n")
+            
+            print("voice-command sent to vrchat!\n\npress \"F\" to speak!\n")
+        #
         else:
-            print("error: unsupported command!\n\ntry again\n\npress \"F\" to speak!\n")
+            print("error: unsupported command!\n\ntry again...\n\npress \"F\" to speak!\n")
         #
     except UnknownValueError:
         print("didn't quite get that, try again...\n\npress \"F\" to speak!\n")
