@@ -28,7 +28,7 @@ def voice_command():
     print("listening now...\n")
     with mic as voice: speech = engine.listen(voice)
     try:
-        command = sub("[^A-Za-z0-9]+", "", str(engine.recognize_google(speech)).casefold())
+        command = sub(r"[^\w\s]", "", str(engine.recognize_google(speech)).casefold())
         print(f"speech recognized as: {command}.\n")
         if START_SEQUENCE and DISABLE in command:
             parameter = command.replace(START_SEQUENCE, "").replace(DISABLE, "").capitalize()
