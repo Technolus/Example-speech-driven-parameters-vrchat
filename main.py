@@ -41,7 +41,7 @@ def voice_command():
             driver.send_message(f"/avatar/parameters/{parameter}", False)
             print("voice-command sent to vrchat!\n")
         else:
-            print("error: unsupported command!")
+            print("error: unsupported command!\n\ntry again\n\npress \"F\" to speak!\n")
         #
     except UnknownValueError:
         print("didn't quite get that, try again...\n\npress \"F\" to speak!\n")
