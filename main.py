@@ -30,14 +30,14 @@ def voice_command():
         command = str(engine.recognize_google(speech)).casefold()
         print(f"speech recognized as: {command}.\n")
         if START_SEQUENCE and DISABLE in command:
-            obj = command.replace(START_SEQUENCE, "").replace(DISABLE, "").capitalize()
-            print(f"disabling the following parameter: {obj}\n")
-            driver.send_message(f"/avatar/parameters/{obj}", True)
+            parameter = command.replace(START_SEQUENCE, "").replace(DISABLE, "").capitalize()
+            print(f"disabling the following parameter: {parameter}\n")
+            driver.send_message(f"/avatar/parameters/{parameter}", True)
             print("voice-command sent to vrchat!\n")
         elif START_SEQUENCE and ENABLE in command:
-            obj = command.replace(START_SEQUENCE, "").replace(ENABLE, "").capitalize()
-            print(f"enabling the following parameter: {obj}\n")
-            driver.send_message(f"/avatar/parameters/{obj}", False)
+            parameter = command.replace(START_SEQUENCE, "").replace(ENABLE, "").capitalize()
+            print(f"enabling the following parameter: {parameter}\n")
+            driver.send_message(f"/avatar/parameters/{parameter}", False)
             print("voice-command sent to vrchat!\n")
         else:
             print("error: unsupported command!")
